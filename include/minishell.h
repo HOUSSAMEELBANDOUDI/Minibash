@@ -83,5 +83,42 @@ typedef struct s_data
 	int		*fd_heredoc;
 }			t_data;
 
+void	execute(t_data *data);
+void	child_process(t_data *data, t_list *token, int *lexer, pid_t *pids);
+void	deal_with_pipes(t_data *data);
+void	get_cmd_and_args(t_list *token, int *lexer, t_data *data);
+void	finally_execute(t_data *data, int fd[], pid_t *pids);
+void	close_pipes(t_args *args);
+void	recycle_pipe(t_args *args);
+void	execute_builtin(t_data *data, t_exec *exec, pid_t *pids);
+void	wait_all_processes(t_data *data, pid_t *pids, int flag);
+void	verify_permission(char *copy, char **cmd, char **env);
+int		verify(int result, char *str, char **cmd, char **env);
+
+/* Builtin */
+void	exit_builtin(t_data *data, pid_t *pids, char **args);
+void	env_builtin(t_data *data, char **args);
+int		pwd_builtin(t_data *data);
+void	unset_builtin(t_data *data, char **args);
+void	export_builtin(t_data *data, char **args);
+char	**split_key_and_value(char *str, char c);
+int		check_key(char *str);
+void	print_export(t_list *export);
+int 	echo_builtin(t_data *data, char **args);
+void	cd_builtin(t_data *data, char **args);
+
+/* Redirect */
+int		validate_files(t_list *token, int *lexer, int *fd_in, int *fd_out);
+void	redirect_files(int fd_in, int fd_out);
+void	close_files(int fd_in, int fd_out);
+int		check_heredoc(t_data *data);
+
+/* Free */
+void	free_cmd_not_found(char **path, char **env, t_data *data, pid_t *pids);
+void	free_builtin(t_data *data, pid_t *pids);
+void	free_for_all(t_data *data);
+void	free_list(t_list *list);
+void	free_exec(t_exec *exec);
+
 #endif
 
